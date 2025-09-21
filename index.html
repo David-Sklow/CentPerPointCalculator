@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Cent Per Point Calculator - Calculate the value of points and rewards">
+    <title>Cent Per Point Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <button id="nightModeToggle" class="night-mode-toggle" title="Toggle Night Mode">
+        <span class="toggle-icon">🌙</span>
+    </button>
+    
+    <div class="container">
+        <header>
+            <h1>Cent Per Point Calculator</h1>
+            <p class="subtitle">Calculate the value of your points and rewards</p>
+        </header>
+        
+        <main>
+            <form id="calculatorForm">
+                <div class="form-group">
+                    <label for="points">Number of Points Used:</label>
+                    <input type="number" id="points" name="points" placeholder="Enter number of points" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="fees">Associated Award Taxes and Fees ($):</label>
+                    <input type="number" id="fees" name="value" step="0.01" placeholder="Enter dollar value" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="value">Equivalent Cash Cost ($):</label>
+                    <input type="number" id="value" name="value" step="0.01" placeholder="Enter dollar value" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description (optional):</label>
+                    <input type="text" id="description" name="description" placeholder="e.g., Hotel stay, Flight, Gift card">
+                </div>
+                
+                <button type="submit">Calculate Cent Per Point</button>
+            </form>
+            
+            <div id="result" class="result">
+                <div class="result-value" id="resultValue"></div>
+                <div id="resultDescription"></div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>Use often? Tip a coffee :)</p>
+            <p>Made with ❤️ by David Sklow at UW-Madison.</p>
+        </footer>
+    </div>
+    
+    <!-- JavaScript -->
+    <script>
+        // Night Mode Toggle Functionality
+        const nightModeToggle = document.getElementById('nightModeToggle');
+        const toggleIcon = document.querySelector('.toggle-icon');
+        const body = document.body;
+        
+        // Check for saved theme preference or default to light mode
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        if (currentTheme === 'dark') {
+            body.classList.add('dark-mode');
+            toggleIcon.textContent = '☀️';
+        }
+        
+        nightModeToggle.addEventListener('click', function() {
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                toggleIcon.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                toggleIcon.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+            }
+        });
+        
+        // Calculator Form Functionality
+        document.getElementById('calculatorForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const points = parseFloat(document.getElementById('points').value);
+            const value = parseFloat(document.getElementById('value').value);
+            const fees = parseFloat(document.getElementById('fees').value);
+            const description = document.getElementById('description').value;
+            
+            if (points <= 0 || value <= 0 || fees <= 0) {
+                alert('Please enter valid positive numbers for points, value, and fees.');
+                return;
+            }
+            
+            const centPerPoint = ((value - fees) / points) * 100;
+            const resultElement = document.getElementById('result');
+            const resultValueElement = document.getElementById('resultValue');
+            const resultDescriptionElement = document.getElementById('resultDescription');
+            
+            resultValueElement.textContent = `${centPerPoint.toFixed(2)} cents per point`;
+            
+            if (description) {
+                resultDescriptionElement.textContent = `For: ${description}`;
+            } else {
+                resultDescriptionElement.textContent = '';
+            }
+            
+            resultElement.classList.add('show');
+        });
+        
+        // Add some interactivity
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', function() {
+                const result = document.getElementById('result');
+                if (result.classList.contains('show')) {
+                    result.classList.remove('show');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
