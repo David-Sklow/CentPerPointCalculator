@@ -169,6 +169,21 @@ footer {
     border-top: 1px solid #e1e5e9;
 }
 
+footer a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+footer a:hover {
+    color: #5a67d8;
+    border-bottom-color: #667eea;
+    text-shadow: 0 0 8px rgba(102, 126, 234, 0.3);
+}
+
 /* Dark Mode Styles */
 body.dark-mode {
     background-color: #1a1a1a;
@@ -211,6 +226,17 @@ body.dark-mode .result {
 body.dark-mode footer {
     color: #a0aec0;
     border-top-color: #4a5568;
+}
+
+body.dark-mode footer a {
+    color: #90cdf4;
+    border-bottom: 2px solid transparent;
+}
+
+body.dark-mode footer a:hover {
+    color: #63b3ed;
+    border-bottom-color: #90cdf4;
+    text-shadow: 0 0 8px rgba(144, 205, 244, 0.4);
 }
 
 body.dark-mode .night-mode-toggle {
