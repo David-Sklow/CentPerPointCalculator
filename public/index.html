@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Cent Per Point Calculator - Calculate the value of points and rewards">
     <title>Cent Per Point Calculator</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✈️</text></svg>">
     <link rel="stylesheet" href="styles.css">
+    <script src="script.js"></script>
 </head>
 <body>
-    <button id="nightModeToggle" class="night-mode-toggle" title="Toggle Night Mode">
+    <button id="nightModeToggle" class="night-mode-toggle" title="Toggle Dark Mode">
         <span class="toggle-icon">🌙</span>
     </button>
     
@@ -36,16 +38,37 @@
                 </div>
 
                 <div class="form-group">
+                    <label>Point Network:</label>
+                    <div class="bubble-select">
+                        <input type="radio" id="amex" name="point_network" value="American Express MR" checked>
+                        <label for="amex" class="bubble-option">Amex MR</label>
+                        
+                        <input type="radio" id="chase" name="point_network" value="Chase UR">
+                        <label for="chase" class="bubble-option">Chase UR</label>
+                        
+                        <input type="radio" id="bilt" name="point_network" value="Bilt Rewards">
+                        <label for="bilt" class="bubble-option">Bilt</label>
+                        
+                        <input type="radio" id="capitalone" name="point_network" value="Capital One Miles">
+                        <label for="capitalone" class="bubble-option">Capital One</label>
+                        
+                        <input type="radio" id="citi" name="point_network" value="Citi ThankYou">
+                        <label for="citi" class="bubble-option">Citi TYP</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label for="description">Description (optional):</label>
                     <input type="text" id="description" name="description" placeholder="e.g., Hotel stay, Flight, Gift card">
                 </div>
                 
-                <button type="submit">Calculate Cent Per Point</button>
+                <button type="submit">Calculate Cents Per Point</button>
             </form>
             
             <div id="result" class="result">
                 <div class="result-value" id="resultValue"></div>
                 <div id="resultDescription"></div>
+                <div id="evaluation" class="evaluation"></div>
             </div>
         </main>
         
@@ -55,72 +78,5 @@
             <p>Made with ❤️ by David Sklow at UW-Madison.</p>
         </footer>
     </div>
-    
-    <!-- JavaScript -->
-    <script>
-        // Night Mode Toggle Functionality
-        const nightModeToggle = document.getElementById('nightModeToggle');
-        const toggleIcon = document.querySelector('.toggle-icon');
-        const body = document.body;
-        
-        // Check for saved theme preference or default to dark mode
-        const currentTheme = localStorage.getItem('theme') || 'dark';
-        if (currentTheme === 'dark') {
-            body.classList.add('dark-mode');
-            toggleIcon.textContent = '☀️';
-        }
-        
-        nightModeToggle.addEventListener('click', function() {
-            body.classList.toggle('dark-mode');
-            
-            if (body.classList.contains('dark-mode')) {
-                toggleIcon.textContent = '☀️';
-                localStorage.setItem('theme', 'dark');
-            } else {
-                toggleIcon.textContent = '🌙';
-                localStorage.setItem('theme', 'light');
-            }
-        });
-        
-        // Calculator Form Functionality
-        document.getElementById('calculatorForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const points = parseFloat(document.getElementById('points').value);
-            const value = parseFloat(document.getElementById('value').value);
-            const fees = parseFloat(document.getElementById('fees').value);
-            const description = document.getElementById('description').value;
-            
-            if (points <= 0 || value <= 0 || fees <= 0) {
-                alert('Please enter valid positive numbers for points, value, and fees.');
-                return;
-            }
-            
-            const centPerPoint = ((value - fees) / points) * 100;
-            const resultElement = document.getElementById('result');
-            const resultValueElement = document.getElementById('resultValue');
-            const resultDescriptionElement = document.getElementById('resultDescription');
-            
-            resultValueElement.textContent = `${centPerPoint.toFixed(2)} cents per point`;
-            
-            if (description) {
-                resultDescriptionElement.textContent = `For: ${description}`;
-            } else {
-                resultDescriptionElement.textContent = '';
-            }
-            
-            resultElement.classList.add('show');
-        });
-        
-        // Add some interactivity
-        document.querySelectorAll('input').forEach(input => {
-            input.addEventListener('input', function() {
-                const result = document.getElementById('result');
-                if (result.classList.contains('show')) {
-                    result.classList.remove('show');
-                }
-            });
-        });
-    </script>
 </body>
 </html>
