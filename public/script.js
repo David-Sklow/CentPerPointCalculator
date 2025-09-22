@@ -57,7 +57,7 @@ function evaluateCPP(cpp, network) {
         boxColor = 'excellent';
         icon = '🌟';
         message = 'Outstanding value! This is a fantastic redemption.';
-        tips = 'Consider booking immediately - this is well above average value.';
+        tips = 'Consider booking immediately. This is well above average value for this program.';
     } else if (cpp >= networkBenchmarks.good) {
         rating = 'Good';
         color = '#10b981';
@@ -71,7 +71,7 @@ function evaluateCPP(cpp, network) {
         boxColor = 'fair';
         icon = '⚖️';
         message = 'Average value. Consider if this fits your travel needs.';
-        tips = 'This is around average value. Consider if cash might be better.';
+        tips = 'This is around average value. Better redemptions may be available at a different time.';
     } else {
         rating = 'Poor';
         color = '#ef4444';
@@ -106,7 +106,8 @@ document.getElementById('calculatorForm').addEventListener('submit', function(e)
     const points = parseFloat(document.getElementById('points').value);
     const value = parseFloat(document.getElementById('value').value);
     const fees = parseFloat(document.getElementById('fees').value);
-    const description = document.getElementById('description').value;
+    // const description = document.getElementById('description').value;
+    const description = '';
     const pointNetwork = document.querySelector('input[name="point_network"]:checked').value;
     
     if (points <= 0 || value <= 0 || fees <= 0) {
