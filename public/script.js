@@ -1,56 +1,78 @@
-// Night Mode Toggle Functionality
-const nightModeToggle = document.getElementById('nightModeToggle');
-const toggleIcon = document.querySelector('.toggle-icon');
-const body = document.body;
+/**
+ * @file script.js
+ * @description Client-side logic for the Cent Per Point Calculator.
+ * @authors David Sklow, Alexander Lopez
+ */
 
-// Check for saved theme preference or default to dark mode
-const currentTheme = localStorage.getItem('theme') || 'dark';
-if (currentTheme === 'dark') {
-    body.classList.add('dark-mode');
-    toggleIcon.textContent = '☀️';
-}
+/**
+ * Handles the night mode toggle button click.
+ * Toggles dark mode on the body, updates the toggle icon,
+ * and persists the user's preference to localStorage.
+ */
+const onNightModeToggleClick = () => {
+    const toggleIcon = document.querySelector('.toggle-icon');
+    document.body.classList.toggle('dark-mode');
 
-nightModeToggle.addEventListener('click', function() {
-    body.classList.toggle('dark-mode');
-    
-    if (body.classList.contains('dark-mode')) {
+    if (document.body.classList.contains('dark-mode')) {
         toggleIcon.textContent = '☀️';
         localStorage.setItem('theme', 'dark');
     } else {
         toggleIcon.textContent = '🌙';
         localStorage.setItem('theme', 'light');
     }
-});
+}
 
-// CPP Evaluation Function
-function evaluateCPP(cpp, network) {
+/**
+ * Initialises the theme on page load.
+ * Reads the saved theme from localStorage and applies dark mode
+ * and the correct toggle icon if the stored preference is 'dark'.
+ */
+const initTheme = () => {
+    const currentTheme = localStorage.getItem('theme') || 'dark';
+    if (currentTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        document.querySelector('.toggle-icon').textContent = '☀️';
+    }
+}
+
+/**
+ * Evaluates the cents-per-point (CPP) value of a redemption.
+ * Compares the calculated CPP against network-specific benchmarks
+ * and returns an HTML string and a CSS class name for the result box.
+ *
+ * @param {number} cpp     - The calculated cents-per-point value.
+ * @param {string} network - The loyalty program name (e.g. 'Chase UR').
+ * @returns {{ html: string, boxColor: string }} Evaluation result containing
+ *   rendered HTML and a colour class ('excellent', 'good', 'fair', or 'poor').
+ */
+const evaluateCPP = (cpp, network) => {
     const benchmarks = {
-        'American Express MR': { 
+        'American Express MR': {
             excellent: 4.0, good: 3.0, average: 2.0, poor: 0,
             tpg: 2.0
         },
-        'Chase UR': { 
+        'Chase UR': {
             excellent: 4.0, good: 3.0, average: 2.05, poor: 0,
             tpg: 2.05
         },
-        'Bilt Rewards': { 
+        'Bilt Rewards': {
             excellent: 4.0, good: 3.2, average: 2.2, poor: 0,
             tpg: 2.2
         },
-        'Capital One Miles': { 
+        'Capital One Miles': {
             excellent: 4.0, good: 2.85, average: 1.85, poor: 0,
             tpg: 1.85
         },
-        'Citi ThankYou': { 
+        'Citi ThankYou': {
             excellent: 4.0, good: 2.90, average: 1.9, poor: 0,
             tpg: 1.9
         }
     };
-    
+
     const networkBenchmarks = benchmarks[network] || { excellent: 4.0, good: 3.0, average: 2.0, poor: 0, tpg: 2.0 };
-    
+
     let rating, color, icon, message, tips, boxColor;
-    
+
     if (cpp >= networkBenchmarks.excellent) {
         rating = 'Excellent';
         color = '#10b981';
@@ -80,72 +102,85 @@ function evaluateCPP(cpp, network) {
         message = 'Poor value. Consider other redemption options.';
         tips = 'This is below average value. Look for better redemptions or consider cash.';
     }
-    
+
     return {
-        html: `
-            <div class="evaluation-content">
-                <div class="evaluation-header">
-                    <span class="evaluation-icon">${icon}</span>
-                    <span class="evaluation-rating" style="color: ${color}">${rating} Value</span>
-                </div>
-                <div class="evaluation-message">${message}</div>
-                <div class="evaluation-tips">💡 ${tips}</div>
-                <div class="evaluation-benchmark">
-                    <small>TPG ${network} valuation as of September 2025: ${networkBenchmarks.tpg}¢ per point</small>
-                </div>
-            </div>
-        `,
+        html: '<div class="evaluation-content">' +
+                  '<div class="evaluation-header">' +
+                      '<span class="evaluation-icon">' + icon + '</span>' +
+                      '<span class="evaluation-rating" style="color: ' + color + '">' + rating + ' Value</span>' +
+                  '</div>' +
+                  '<div class="evaluation-message">' + message + '</div>' +
+                  '<div class="evaluation-tips">💡 ' + tips + '</div>' +
+                  '<div class="evaluation-benchmark">' +
+                      '<small>TPG ' + network + ' valuation as of September 2025: ' + networkBenchmarks.tpg + '¢ per point</small>' +
+                  '</div>' +
+              '</div>',
         boxColor: boxColor
     };
 }
 
-// Calculator Form Functionality
-document.getElementById('calculatorForm').addEventListener('submit', function(e) {
+/**
+ * Handles the calculator form submission.
+ * Reads points, fees, cash value, and point network from the form,
+ * calculates the CPP, evaluates the result, and renders it to the DOM.
+ *
+ * @param {SubmitEvent} e - The form submit event.
+ */
+const onCalculatorFormSubmit = (e) => {
     e.preventDefault();
-    
+
     const points = parseFloat(document.getElementById('points').value);
     const value = parseFloat(document.getElementById('value').value);
     const fees = parseFloat(document.getElementById('fees').value);
-    // const description = document.getElementById('description').value;
     const description = '';
     const pointNetwork = document.querySelector('input[name="point_network"]:checked').value;
-    
+
     if (points <= 0 || value <= 0 || fees <= 0) {
         alert('Please enter valid positive numbers for points, value, and fees.');
         return;
     }
-    
+
     const centPerPoint = ((value - fees) / points) * 100;
     const resultElement = document.getElementById('result');
     const resultValueElement = document.getElementById('resultValue');
     const resultDescriptionElement = document.getElementById('resultDescription');
     const evaluationElement = document.getElementById('evaluation');
-    
-    resultValueElement.textContent = `${centPerPoint.toFixed(2)} cents per point`;
-    
-    if (description) {
-        resultDescriptionElement.textContent = `For: ${description}`;
-    } else {
-        resultDescriptionElement.textContent = '';
-    }
-    
-    // CPP Evaluation
+
+    resultValueElement.textContent = centPerPoint.toFixed(2) + ' cents per point';
+    resultDescriptionElement.textContent = description ? 'For: ' + description : '';
+
     const evaluation = evaluateCPP(centPerPoint, pointNetwork);
     evaluationElement.innerHTML = evaluation.html;
-    
-    // Apply color-coded styling to result box
+
     resultElement.className = 'result show';
     resultElement.classList.add(evaluation.boxColor);
-    
-    resultElement.classList.add('show');
-});
+}
 
-// Add some interactivity
-document.querySelectorAll('input').forEach(input => {
-    input.addEventListener('input', function() {
-        const result = document.getElementById('result');
-        if (result.classList.contains('show')) {
-            result.classList.remove('show');
-        }
-    });
-});
+/**
+ * Handles input changes on any form field.
+ * Hides the result box when the user modifies an input,
+ * prompting them to recalculate.
+ */
+const onInputChange = () => {
+    const result = document.getElementById('result');
+    if (result.classList.contains('show')) {
+        result.classList.remove('show');
+    }
+}
+
+/**
+ * Entry point — runs after the page has fully loaded.
+ * Initialises the theme and binds all event handlers to their
+ * respective DOM elements.
+ */
+window.onload = () => {
+    initTheme();
+
+    document.getElementById('nightModeToggle').addEventListener('click', onNightModeToggleClick);
+    document.getElementById('calculatorForm').addEventListener('submit', onCalculatorFormSubmit);
+
+    const inputs = document.querySelectorAll('input');
+    for (let i = 0; i < inputs.length; i++) {
+        inputs[i].addEventListener('input', onInputChange);
+    }
+};

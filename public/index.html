@@ -3,20 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Cent Per Point Calculator - Calculate the value of points and rewards">
-    <title>Cent Per Point Calculator</title>
+    <meta name="description" content="Free calculator to find the cents-per-point value of your American Express, Chase, Citi, Bilt, and Capital One travel rewards.">
+    <title>Cent Per Point Calculator | Travel Rewards Value Tool</title>
+    <link rel="canonical" href="https://cppcalc.com/" />
+    <meta property="og:title" content="Cent Per Point Calculator" />
+    <meta property="og:description" content="Calculate the value of your travel points and award redemptions." />
+    <meta property="og:url" content="https://cppcalc.com/" />
+    <meta property="og:type" content="website" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Cent Per Point Calculator",
+      "url": "https://cppcalc.com/",
+      "description": "Calculate the cents-per-point value of travel rewards from Amex, Chase, Citi, Bilt, and Capital One.",
+      "applicationCategory": "FinanceApplication"
+    }
+    </script>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✈️</text></svg>">
     <link rel="stylesheet" href="styles.css">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0RCHY4ER2K"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-0RCHY4ER2K');
+    </script>
+    <script src="script.js" defer></script>
 </head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-0RCHY4ER2K"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-0RCHY4ER2K');
-</script>
 <body>
     <button id="nightModeToggle" class="night-mode-toggle" title="Toggle Dark Mode">
         <span class="toggle-icon">🌙</span>
@@ -65,11 +80,6 @@
                     </div>
                 </div>
                 
-                <!-- <div class="form-group">
-                    <label for="description">Description (optional):</label>
-                    <input type="text" id="description" name="description" placeholder="e.g., Hotel stay, Flight, Gift card">
-                </div> -->
-                
                 <button type="submit">Calculate Cents Per Point</button>
             </form>
             
@@ -80,6 +90,5 @@
             </div>
         </main>
     </div>
-    <script src="script.js"></script>
 </body>
 </html>
