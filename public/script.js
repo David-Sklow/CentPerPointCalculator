@@ -66,6 +66,14 @@ const evaluateCPP = (cpp, network) => {
         'Citi ThankYou': {
             excellent: 4.0, good: 2.90, average: 1.9, poor: 0,
             tpg: 1.9
+        },
+        'Wells Fargo Rewards': {
+            excellent: 3.0, good: 2.0, average: 1.65, poor: 0,
+            tpg: 1.65
+        },
+        'Other': {
+            excellent: 2.5, good: 1.5, average: 1.2, poor: 0,
+            tpg: 1.2
         }
     };
 
@@ -112,7 +120,7 @@ const evaluateCPP = (cpp, network) => {
                   '<div class="evaluation-message">' + message + '</div>' +
                   '<div class="evaluation-tips">💡 ' + tips + '</div>' +
                   '<div class="evaluation-benchmark">' +
-                      '<small>TPG ' + network + ' valuation as of September 2025: ' + networkBenchmarks.tpg + '¢ per point</small>' +
+                      '<small>TPG ' + network + ' valuation as of February 2026: ' + networkBenchmarks.tpg + '¢ per point</small>' +
                   '</div>' +
               '</div>',
         boxColor: boxColor
@@ -135,9 +143,12 @@ const onCalculatorFormSubmit = (e) => {
     const description = '';
     const pointNetwork = document.querySelector('input[name="point_network"]:checked').value;
 
-    if (points <= 0 || value <= 0 || fees <= 0) {
-        alert('Please enter valid positive numbers for points, value, and fees.');
-        return;
+    if (points <= 0 || value <= 0) {
+        alert('Please enter positive non-zero vaules for points and equivalent value.');
+    }
+
+    if (fees < 0) {
+        alert('Please enter a positive value for associated fees.');
     }
 
     const centPerPoint = ((value - fees) / points) * 100;
